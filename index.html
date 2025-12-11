@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <meta name="Description" content="Online hangman game">
+    <meta name="keywords" content="hangman, online hangman, neon hangman, retro arcade hangman">
+    <meta name="author" content="Claire Lemonnier">
+    <title>Neon Hangman</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-brick">
+    <div class="wrapper">
+        <!-- header -->
+        <header>
+            <h1>hangman</h1>
+            <div id="nav-menu">
+                <img id="toggle-nav" src="assets/images/cog.svg" width="35" height="35" alt="cog-menu-open">
+                <!-- menu content-->
+                <div class="menu-container bg-brick hide">
+                    <button class="btn btn-menu b-neon-blue" data-content="instructions">How to play</button>
+                    <div id="instructions" class="menu-content hide" data-type="menu-content">
+                        <ul>
+                            <li>Can you find the hidden word?</li>
+                            <li>Click on a letter to reveal a match</li>
+                            <li>Guess the wrong letter and a part of the hangman will appear</li>
+                            <li>You have 10 attempts in total</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-menu b-neon-blue" data-content="settings">Settings</button>
+                    <div id="settings" class="menu-content hide" data-type="menu-content">
+                        <p>Levels</p>
+                        <div class="btn-settings-menu">
+                            <button class="btn btn-level b-neon-purple active" data-level="easy">easy</button>
+                            <button class="btn btn-level b-neon-purple" data-level="medium">medium</button>
+                            <button class="btn btn-level b-neon-purple" data-level="hard">hard</button>
+                        </div>
+                        <!--test-->
+                        <p>Categories</p>
+                        <div class="btn-settings-menu">
+                            <button class="btn btn-category b-neon-purple active"
+                                data-category="dictionary">dictionary</button>
+                            <button class="btn btn-category b-neon-purple" data-category="animals">animals</button>
+                            <button class="btn btn-category b-neon-purple" data-category="food">food</button>
+                            <button class="btn btn-category b-neon-purple" data-category="transport">transport</button>
+                        </div>
+                        <p>Sounds</p>
+                        <div class="btn-settings-menu">
+                            <button class="btn btn-volume b-neon-purple active" data-sound="on"><img
+                                    src="assets/images/soundon.svg" alt="sound-on"> on </button>
+                            <button class="btn btn-volume b-neon-purple" data-sound="off"><img
+                                    src="assets/images/soundoff.svg" alt="sound-off"> off</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-menu b-neon-blue" data-content="leaderboard">Leaderboard</button>
+                    <div id="leaderboard" class="menu-content hide" data-type="menu-content">
+                    </div>
+                </div>
+                <!-- end menu content -->
+            </div>
+        </header>
+        <!-- game info -->
+        <div class="game-info b-neon-green mg-bottom">
+            <div class="scoring sm-hide"><img src="assets/images/soundon.svg" width="42" height="22" alt="turn sound on"
+                    data-attr="sound">
+            </div>
+            <div class="scoring sm-hide"><img src="assets/images/levels.svg" width="42" height="22" alt="category"><span
+                    class="category">dictionary</span>
+            </div>
+            <div class="scoring"><img src="assets/images/trophy.svg" width="42" height="22" alt="best score"><span
+                    id="best-score">0</span>
+            </div>
+            <div class="scoring"><img src="assets/images/star.svg" width="42" height="22" alt="score"><span
+                    id="score">0</span> </div>
+            <div class="scoring"><img src="assets/images/timer.svg" width="42" height="22" alt="timer"><span
+                    id="timer">0:00</span></div>
+        </div>
+        <!-- game container -->
+        <div class="game-container mg-bottom">
+            <!-- audios -->
+            <audio id="success-sound" muted>
+                <source src="assets/sounds/mixkit-instant-win-2021.wav" type="audio/mpeg">
+                <p>Your browser doesn't support HTML5 audio.</p>
+            </audio>
+            <audio id="fail-sound" muted>
+                <source src="assets/sounds/mixkit-wrong-electricity-buzz-955.wav" type="audio/mpeg">
+                <p>Your browser doesn't support HTML5 audio.</p>
+            </audio>
+            <audio id="win-sound" muted>
+                <source src="assets/sounds/mixkit-video-game-win-2016.wav" type="audio/mpeg">
+                <p>Your browser doesn't support HTML5 audio.</p>
+            </audio>
+            <audio id="game-over-sound" muted>
+                <source src="assets/sounds/mixkit-musical-game-over-959.wav" type="audio/mpeg">
+                <p>Your browser doesn't support HTML5 audio.</p>
+            </audio>
+            <!-- game over -->
+            <div id="game-over" class="game-over-container b-neon-purple hide">
+                <h2>Game Over</h2>
+                <p class="pd-bottom">Hidden word: <span id="correct-answer">quack</span></p>
+                <div class="content-group pd-bottom">
+                    <div>Words: <span class="count-words">0</span></div>
+                    <div>Score: <span class="final-score">0</span></div>
+                </div>
+                <div class="best-score-container hide">
+                    <h3 class="pd-bottom" id="best-new-score">best new score</h3>
+                    <p>Enter your name to save your score</p>
+                    <div id="scorename-container">
+                        <input id="scorename" class="b-neon-blue" type="text" name="scorename"
+                            aria-labelledby="scorename">
+                    </div>
+                    <p id="save-notification" class="hide">Your score has been saved!</p>
+                </div>
+                <div class="content-group pd-top">
+                    <button id="play-again" class="btn b-neon-blue" data-function="start-game">play again</button>
+                    <button class="leave btn b-neon-blue">leave</button>
+                </div>
+            </div>
+            <!-- end game over -->
+            <div class="flex-container">
+                <div class="word-container b-neon-purple mg-bottom">
+                    <img id="hint" class="hide" src="assets/images/hint.svg" width="24" height="24" alt="open-hint">
+                    <div id="hint-content" class="bg-brick hide"></div>
+                    <div class="word-intro">Can you guess the hidden word?</div>
+                    <button id="start" class="btn b-neon-blue" data-function="start-game">play</button>
+                    <div class="word hide"></div>
+                </div>
+                <!-- message win -->
+                <div id="game-win" class="win-container b-neon-purple hide">
+                    <h2>congratulations!</h2>
+                    <div class="content-group pd-bottom mg-bottom">
+                        <div>Words: <span class="count-words">0</span></div>
+                        <div>Score: <span class="final-score">0</span></div>
+                    </div>
+                    <button class="continue btn b-neon-blue" data-function="start-game">continue</button>
+                    <button class="leave btn b-neon-blue">leave</button>
+                </div>
+                <!-- keyboard -->
+                <div class="keyboard-container b-neon-purple">
+                    <div class="key b-neon-blue" id="a">a</div>
+                    <div class="key b-neon-blue" id="b">b</div>
+                    <div class="key b-neon-blue" id="c">c</div>
+                    <div class="key b-neon-blue" id="d">d</div>
+                    <div class="key b-neon-blue" id="e">e</div>
+                    <div class="key b-neon-blue" id="f">f</div>
+                    <div class="key b-neon-blue" id="g">g</div>
+                    <div class="key b-neon-blue" id="h">h</div>
+                    <div class="key b-neon-blue" id="i">i</div>
+                    <div class="key b-neon-blue" id="j">j</div>
+                    <div class="key b-neon-blue" id="k">k</div>
+                    <div class="key b-neon-blue" id="l">l</div>
+                    <div class="key b-neon-blue" id="m">m</div>
+                    <div class="key b-neon-blue" id="n">n</div>
+                    <div class="key b-neon-blue" id="o">o</div>
+                    <div class="key b-neon-blue" id="p">p</div>
+                    <div class="key b-neon-blue" id="q">q</div>
+                    <div class="key b-neon-blue" id="r">r</div>
+                    <div class="key b-neon-blue" id="s">s</div>
+                    <div class="key b-neon-blue" id="t">t</div>
+                    <div class="key b-neon-blue" id="u">u</div>
+                    <div class="key b-neon-blue" id="v">v</div>
+                    <div class="key b-neon-blue" id="w">w</div>
+                    <div class="key b-neon-blue" id="x">x</div>
+                    <div class="key b-neon-blue" id="y">y</div>
+                    <div class="key b-neon-blue" id="z">z</div>
+                </div>
+            </div>
+            <!-- hangman -->
+            <div class="hangman-container b-neon-purple">
+                <div class="scoring volume-mobile"><img src="assets/images/soundon.svg" width="32" height="22"
+                        alt="turn sound on" data-attr="sound"></div>
+                <svg id="hangman" width="100%" height="100%" viewbox="0 0 380 430" x="0" y="0">
+                    <!--Filters-->
+                    <defs>
+                        <linearGradient id="grad1" x1="7%" y1="35%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" style="stop-color:#15f4ee;stop-opacity:1" />
+                            <stop offset="0.3" style="stop-color:magenta;stop-opacity:1" />
+                            <stop offset="0.5" style="stop-color:yellow;stop-opacity:1" />
+                            <stop offset="1" style="stop-color:#15f4ee;stop-opacity:1" />
+                        </linearGradient>
+                        <!--https://stackoverflow.com/questions/54112231/is-it-possible-to-create-a-glow-effect-in-svg-->
+                        <filter id="neon" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+                            <feComposite operator="in" in2="SourceGraphic" />
+                            <feGaussianBlur stdDeviation="19" result="glow1" />
+                            <feComponentTransfer result="glow1">
+                                <feFuncA type="linear" slope="0.5" intercept="0" />
+                            </feComponentTransfer>
+                            <!--in="blur-merged"-->
+                            <feColorMatrix result="red-blur" in="glow1" type="matrix" values="1 0 0 0 0
+                                    0 1 0 0 0
+                                    0 0 1 0 0
+                                    0 0 0 1 0" />
+                            <feMerge>
+                                <feMergeNode in="red-blur" />
+                                <feMergeNode in="glow1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <!--Hangman-->
+                    <g filter="url(#neon)">
+                        <!--frame-->
+                        <path class="path" id="part1" d="M40,400 H330" />
+                        <path class="path" id="part2" d="M330,400 V40" />
+                        <path class="path" id="part3" d="M330,40 H150" />
+                        <path class="path" id="part4" d="M150,40 V90" />
+                        <!--head-->
+                        <!--https://www.smashingmagazine.com/2019/03/svg-circle-decomposition-paths/-->
+                        <path class="path" id="part5" d="M 110, 130
+                        a 40,40 0 1,0 80,0
+                        a 40,40 0 1,0 -80,0 " />
+                        <!--body-->
+                        <path class="path" id="part6" d="M150,172 V260" />
+                        <!--arms-->
+                        <path class="path" id="part7" d="M150,195 L105,170" />
+                        <path class="path" id="part8" d="M150,195 L195,170" />
+                        <!--legs-->
+                        <path class="path" id="part9" d="M150,260 L110,310" />
+                        <path class="path" id="part10" d="M150,260 L190,310" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <!-- footer -->
+        <footer>
+            <div class="footer-content">
+                <button id="contact-us" class="btn">Contact us</button>
+            </div>
+            <div class="footer-content">
+                <a href="https://github.com/lemocla" target="_blank" rel="noopener noreferrer"
+                    aria-label="open github in a new tab">
+                    <img src="assets/images/github.svg" alt="github logo">
+                </a>
+                <i id="lose" class="fab fa-github"></i>
+            </div>
+            <div class="footer-content">
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
+                    aria-label="open facebook in a new tab">
+                    <img src="assets/images/facebook.svg" alt="facebook logo">
+                </a>
+                <a href="https://twitter.com/?lang=en-gb" target="_blank" rel="noopener noreferrer"
+                    aria-label="open twitter in a new tab">
+                    <img src="assets/images/twitter.svg" alt="twitter logo">
+                </a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
+                    aria-label="open instagram in a new tab">
+                    <img src="assets/images/instagram.svg" alt="instagram logo">
+                </a>
+            </div>
+        </footer>
+    </div>
+    <!--Modal form-->
+    <div id="modal-form" class="modal-window hide">
+        <div class="form-container bg-brick">
+            <img class="close-modal" src="assets/images/close-modals.svg" alt="close modal" data-close="modal-form">
+            <h2>Contact us</h2>
+            <form id="form" class="form-content">
+                <label for="fname">First name</label><br>
+                <input class="b-neon-blue" type="text" id="fname" name="fname" required><br>
+                <label for="lname">Last name</label><br>
+                <input class="b-neon-blue" type="text" id="lname" name="lname" required><br>
+                <label for="email">Email</label><br>
+                <input class="b-neon-blue" type="email" id="email" name="email" required><br>
+                <label for="message">Message:</label><br>
+                <textarea class="b-neon-blue" id="message" name="message" required></textarea><br>
+                <input id="submit-email" class="btn btn-form" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    <!-- end modal form-->
+    <!-- thank you modal -->
+    <div id="modal-thankyou" class="modal-window hide">
+        <div class="form-response-container bg-brick">
+            <img class="close-modal" src="assets/images/close-modals.svg" alt="close modal" data-close="modal-thankyou">
+            <p class="mg-bottom">Thank your for your message!</p>
+            <button class="btn btn-form" data-close="modal-thankyou">Close</button>
+        </div>
+    </div>
+    <!-- error message modal -->
+    <div id="modal-error" class="modal-window hide">
+        <div class="form-response-container bg-brick">
+            <img class="close-modal" src="assets/images/close-modals.svg" alt="close modal" data-close="modal-error">
+            <p>We are sorry, your email couldn't go through at this time.
+                But don't worry, you can contact us as follow:</p>
+            <p class="pd-top mg-bottom">claireci.lemonnier@gmail.com</p>
+            <button class="btn btn-form" data-close="modal-thankyou">Close</button>
+        </div>
+    </div>
+    <!--end thank you modal-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="assets/javascript/navigation.js"></script>
+    <script src="assets/javascript/game.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+    <script>
+        emailjs.init('user_QcxrbFoaC4sGqGsZ2MFsM')
+    </script>
+    <script src="assets/javascript/emailjs.js"></script>
+</body>
+
+</html>
